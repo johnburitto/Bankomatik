@@ -1,5 +1,7 @@
-﻿using Bankomatik.Crypto.Interfaces;
+﻿using System.Text;
 using System.Security.Cryptography;
+
+using Bankomatik.Crypto.Interfaces;
 
 namespace Bankomatik.Crypto.Implementations
 {
@@ -55,6 +57,19 @@ namespace Bankomatik.Crypto.Implementations
 			{
 				return rsa.Encrypt(data, RSAEncryptionPadding.Pkcs1);
 			}
+		}
+
+		/// <inheritdoc />
+		public string HashSHA256(string data, int times = 1)
+		{
+			byte[] encryptedData = [];
+
+			for (int i = 0; i < times; i++)
+			{
+				encryptedData = SHA256.HashData(Encoding.UTF8.GetBytes(data));
+			}
+
+			return Convert.ToBase64String(encryptedData);
 		}
 
 		#endregion

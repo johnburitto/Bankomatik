@@ -18,5 +18,12 @@
 		/// <param name="data">Data to decrypt.</param>
 		/// <returns>Decrypted data.</returns>
 		byte[] DecryptData(byte[] data);
+
+		/// <summary>
+		/// Hash data using SHA256.
+		/// </summary>
+		/// <param name="data">Data.</param>
+		/// <returns>String representations of hash.</returns>
+		string HashSHA256(string data, int times = 1);
 	}
 }

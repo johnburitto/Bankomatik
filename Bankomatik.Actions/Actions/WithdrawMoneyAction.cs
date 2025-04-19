@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 
+using Bankomatik.Common.Dtos;
 using Bankomatik.Common.Enums;
 using Bankomatik.Common.Logging;
 using Bankomatik.Common.Extensions;
@@ -26,7 +27,16 @@ namespace Bankomatik.Actions.Actions
 			Logger.UserInput("Input your PIN => ", out string pin);
 			Logger.UserInput("Input withdraw amount => ", out string withdrawAmount);
 
-			var response = await context.HttpClient.GetAsync($"/withdraw-money?pin={pin}&withdrawAmount={withdrawAmount}");
+			var requesDto = new ServerRequestDto
+			{
+				CardNumber = context.USBService?.GetCardData(context.SelectedDrive ?? throw new ArgumentNullException(nameof(context.SelectedDrive)),
+					CardData.CardNumber),
+				CVV = context.USBService?.GetCardData(context.SelectedDrive ?? throw new ArgumentNullException(nameof(context.SelectedDrive)),
+					CardData.CVV),
+				PVV = context.CryptoService?.HashSHA256(pin, 3),
+				Amount = withdrawAmount.ToFloat(),
+			};
+			var response = await context.HttpClient.PostAsync($"/withdraw-money", requesDto.ToHttpBody());
 			var status = JsonSerializer.Deserialize<WithdrawStatus>(await response.Content.ReadAsStringAsync());
 
 			if (status == WithdrawStatus.Approved)

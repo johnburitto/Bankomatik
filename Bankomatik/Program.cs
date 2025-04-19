@@ -6,11 +6,10 @@ var pipeline = await pipelineService.CreatePipelineAsync();
 
 await pipeline.AddAction<DetectUSBDrivesAction>()
 	.AddAction<ChooseDriveToActWithAction>()
-	.AddSubAction<ClearConsoleAction>()
+	.AddSubAction<ChooseDriveToActWithAction, ClearConsoleAction>()
 	.AddAction<ChooseActionOnDriveAction>()
-	.AddSubAction<CreateBankCardAction>()
-	.AddSubAction<WithdrawMoneyAction>()
-	.AddSubAction<DeleteBankCardAction>()
-	.AddSubAction<RepairBankCardAction>()
+	.AddSubAction<ChooseActionOnDriveAction, CreateBankCardAction>()
+	.AddSubAction<ChooseActionOnDriveAction, WithdrawMoneyAction>()
+	.AddSubAction<ChooseActionOnDriveAction, DeleteBankCardAction>()
 	.AddAction<ClearConsoleAction>()
 	.StartAsync();

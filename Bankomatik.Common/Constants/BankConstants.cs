@@ -11,9 +11,9 @@
 		public const string BankCardDirectory = "Card";
 
 		/// <summary>
-		/// Account file name.
+		/// Card number file name.
 		/// </summary>
-		public const string AccountFileName = "account.dat";
+		public const string CardNumberFileName = "cardNumber.dat";
 
 		/// <summary>
 		/// Balance file name.

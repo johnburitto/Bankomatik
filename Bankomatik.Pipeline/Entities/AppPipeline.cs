@@ -51,9 +51,11 @@ namespace Bankomatik.Pipeline.Entities
 		}
 
 		/// <inheritdoc />
-		public IPipeline AddSubAction<T>() where T : IAction, new()
+		public IPipeline AddSubAction<TAction, TSubaction>()
+			where TAction : IAction
+			where TSubaction : IAction, new()
 		{
-			Actions.LastOrDefault()?.SubActions?.Add(new T());
+			Actions.FirstOrDefault(action => action.GetType() == typeof(TAction))?.SubActions?.Add(new TSubaction());
 
 			return this;
 		}

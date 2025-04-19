@@ -1,4 +1,5 @@
 ﻿using Bankomatik.USB.Dtos;
+using Bankomatik.Common.Enums;
 
 namespace Bankomatik.USB.Interfaces
 {
@@ -31,5 +32,13 @@ namespace Bankomatik.USB.Interfaces
 		/// <param name="drive">USB drive info.</param>
 		/// <param name="amount">Withdraw amount.</param>
 		void WithdrawMoney(USBDriveInfo drive, float amount);
+
+		/// <summary>
+		/// Get card data from USB drive.
+		/// </summary>
+		/// <param name="drive">USB drive.</param>
+		/// <param name="type">Data type.</param>
+		/// <returns>Requested data.</returns>
+		string GetCardData(USBDriveInfo drive, CardData type);
 	}
 }

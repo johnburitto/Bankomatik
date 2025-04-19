@@ -6,9 +6,9 @@
 	public class CardInfo
 	{
 		/// <summary>
-		/// Provides information about account.
+		/// Provides information about card number.
 		/// </summary>
-		public string? Account { get; set; }
+		public string? CardNumber { get; set; }
 
 		/// <summary>
 		/// Provides information about balance.
@@ -18,11 +18,11 @@
 		/// <summary>
 		/// Provides information about CVV.
 		/// </summary>
-		public int CVV { get; set; }
+		public string? CVV { get; set; }
 
 		/// <summary>
 		/// Provides information about PIN.
 		/// </summary>
-		public int Pin { get; set; }
+		public string? Pin { get; set; }
 	}
 }

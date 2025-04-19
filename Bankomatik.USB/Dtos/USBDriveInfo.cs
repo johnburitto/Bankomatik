@@ -50,7 +50,7 @@ namespace Bankomatik.USB.Dtos
 			{
 				var files = Directory.GetFiles($"{Info.Name}{BankConstants.BankCardDirectory}");
 
-				if (files.Contains($"{Info.Name}{BankConstants.BankCardDirectory}\\{BankConstants.AccountFileName}")
+				if (files.Contains($"{Info.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CardNumberFileName}")
 					&& files.Contains($"{Info.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CVVFileName}")
 					&& files.Contains($"{Info.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}")
 					&& files.Contains($"{Info.Name}{BankConstants.BankCardDirectory}\\{BankConstants.PinFileName}"))

@@ -87,11 +87,6 @@ namespace Bankomatik.Actions.Actions
 				actions += "Delete bank card.\n";
 			}
 
-			if (drive.CardStatus == DriveStatus.Corrupted.GetDescription())
-			{
-				actions += "Repair bank card.\n";
-			}
-
 			return actions.Split("\n").ToList();
 		}
 

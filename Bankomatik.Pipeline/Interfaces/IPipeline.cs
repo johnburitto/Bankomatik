@@ -22,9 +22,12 @@ namespace Bankomatik.Pipeline.Interfaces
 		/// <summary>
 		/// Add sub-action to previous action.
 		/// </summary>
-		/// <typeparam name="T">Action type.</typeparam>
+		/// <typeparam name="TAction">Action where add sub-action.</typeparam>
+		/// <typeparam name="TSubaction">Sub-action type.</typeparam>
 		/// <returns>App pipeline.</returns>
-		IPipeline AddSubAction<T>() where T : IAction, new();
+		IPipeline AddSubAction<TAction, TSubaction>()
+			where TAction : IAction 
+			where TSubaction : IAction, new();
 
 		/// <summary>
 		/// Start pipeline.

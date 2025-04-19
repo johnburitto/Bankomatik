@@ -5,6 +5,7 @@ using Bankomatik.USB.Interfaces;
 using Bankomatik.Common.Constants;
 using Bankomatik.Crypto.Interfaces;
 using Bankomatik.Common.Extensions;
+using Bankomatik.Common.Enums;
 
 namespace Bankomatik.USB.Implementations
 {
@@ -41,20 +42,20 @@ namespace Bankomatik.USB.Implementations
 		public void CreateUSBBankCard(USBDriveInfo drive, CardInfo card)
 		{
 			Directory.CreateDirectory($"{drive.Info?.Name}{BankConstants.BankCardDirectory}");
-			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.AccountFileName}", 
-				_cryptoService.EncryptData(Encoding.UTF8.GetBytes(card.Account ?? "")));
+			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CardNumberFileName}", 
+				_cryptoService.EncryptData(Encoding.UTF8.GetBytes(card.CardNumber ?? "")));
 			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CVVFileName}",
-				_cryptoService.EncryptData(BitConverter.GetBytes(card.CVV)));
+				_cryptoService.EncryptData(Encoding.UTF8.GetBytes(card.CVV ?? "")));
 			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}",
 				_cryptoService.EncryptData(BitConverter.GetBytes(card.Balance)));
 			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.PinFileName}",
-				_cryptoService.EncryptData(BitConverter.GetBytes(card.Pin)));
+				_cryptoService.EncryptData(Encoding.UTF8.GetBytes(card.Pin ?? "")));
 		}
 
 		/// <inheritdoc />
 		public void DeleteUSBBankCard(USBDriveInfo drive)
 		{
-			File.Delete($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.AccountFileName}");
+			File.Delete($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CardNumberFileName}");
 			File.Delete($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CVVFileName}");
 			File.Delete($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}");
 			File.Delete($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.PinFileName}");
@@ -84,6 +85,21 @@ namespace Bankomatik.USB.Implementations
 					Index = index
 				})
 				.ToList();
+
+		/// <inheritdoc />
+		public string GetCardData(USBDriveInfo drive, CardData type)
+			=> type switch
+			{
+				CardData.CardNumber => Encoding.UTF8.GetString(_cryptoService.DecryptData(
+					File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CardNumberFileName}"))),
+				CardData.CVV => Encoding.UTF8.GetString(_cryptoService.DecryptData(
+					File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.CVVFileName}"))),
+				CardData.Balance => Encoding.UTF8.GetString(_cryptoService.DecryptData(
+					File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}"))),
+				CardData.PIN => Encoding.UTF8.GetString(_cryptoService.DecryptData(
+					File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.PinFileName}"))),
+				_ => throw new Exception($"There is not valid data type '{type}'")
+			};
 
 		#endregion
 	}
