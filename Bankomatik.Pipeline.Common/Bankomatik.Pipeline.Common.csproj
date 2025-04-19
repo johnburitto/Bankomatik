@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bankomatik.Common\Bankomatik.Common.csproj" />
+    <ProjectReference Include="..\Bankomatik.Crypto\Bankomatik.Crypto.csproj" />
+    <ProjectReference Include="..\Bankomatik.USB\Bankomatik.USB.csproj" />
+  </ItemGroup>
+
+</Project>
