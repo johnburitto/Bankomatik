@@ -6,6 +6,6 @@
 	public enum WithdrawStatus
 	{
 		Approved,
-		NotApproved
+		Rejected
 	}
 }

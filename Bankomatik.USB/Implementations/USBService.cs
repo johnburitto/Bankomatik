@@ -4,8 +4,8 @@ using Bankomatik.USB.Dtos;
 using Bankomatik.USB.Interfaces;
 using Bankomatik.Common.Constants;
 using Bankomatik.Crypto.Interfaces;
-using Bankomatik.Common.Extensions;
 using Bankomatik.Common.Enums;
+using Bankomatik.Common.Logging;
 
 namespace Bankomatik.USB.Implementations
 {
@@ -50,6 +50,9 @@ namespace Bankomatik.USB.Implementations
 				_cryptoService.EncryptData(BitConverter.GetBytes(card.Balance)));
 			File.WriteAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.PinFileName}",
 				_cryptoService.EncryptData(Encoding.UTF8.GetBytes(card.Pin ?? "")));
+
+			Logger.Information($"Bank card created on USB drive '{drive.Info?.Name}'");
+			Logger.Information($"Your PIN => '{card.Pin}'");
 		}
 
 		/// <inheritdoc />
@@ -65,9 +68,8 @@ namespace Bankomatik.USB.Implementations
 		/// <inheritdoc />
 		public void WithdrawMoney(USBDriveInfo drive, float amount)
 		{
-			var cardBalance = Encoding.UTF8.GetString(_cryptoService.DecryptData(
-				File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}")))
-				.ToFloat();
+			var cardBalance = BitConverter.ToSingle(_cryptoService.DecryptData(
+				File.ReadAllBytes($"{drive.Info?.Name}{BankConstants.BankCardDirectory}\\{BankConstants.BalanceFileName}")), 0);
 
 			cardBalance -= amount;
 

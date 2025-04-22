@@ -24,6 +24,6 @@
 		/// </summary>
 		/// <param name="data">Data.</param>
 		/// <returns>String representations of hash.</returns>
-		string HashSHA256(string data, int times = 1);
+		byte[] HashSHA256(string data, int times = 1);
 	}
 }

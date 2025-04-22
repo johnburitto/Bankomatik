@@ -33,13 +33,13 @@ namespace Bankomatik.Actions.Actions
 					CardData.CardNumber),
 				CVV = context.USBService?.GetCardData(context.SelectedDrive ?? throw new ArgumentNullException(nameof(context.SelectedDrive)),
 					CardData.CVV),
-				PVV = context.CryptoService?.HashSHA256(pin, 3),
+				PVV = context.CryptoService?.HashSHA256(pin, 3).ToPVV(),
 				Amount = withdrawAmount.ToFloat(),
 			};
 			var response = await context.HttpClient.PostAsync($"/withdraw-money", requesDto.ToHttpBody());
-			var status = JsonSerializer.Deserialize<WithdrawStatus>(await response.Content.ReadAsStringAsync());
+			var status = await response.Content.ReadAsStringAsync();
 
-			if (status == WithdrawStatus.Approved)
+			if (status.Replace("\"", "") == WithdrawStatus.Approved.ToString().ToUpper())
 			{
 				context.USBService?.WithdrawMoney(context.SelectedDrive ?? throw new ArgumentNullException(nameof(context.SelectedDrive)),
 					withdrawAmount.ToFloat());

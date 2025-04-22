@@ -38,7 +38,9 @@ namespace Bankomatik.Actions.Actions
 		{
 			GetActionsOnDrive(context.SelectedDrive)
 				.Select((action, index) => new { Action = action, Index = index + 1 })
-				.ToList().ForEach(action =>
+				.Where(action => action.Action != "")
+				.ToList()
+				.ForEach(action =>
 				{
 					Logger.Information($"{action.Index}. {action.Action}");
 				});
@@ -53,9 +55,9 @@ namespace Bankomatik.Actions.Actions
 
 					break;
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
-					Logger.Error("Invalid drive index.");
+					Logger.Error($"Occured error {e.Message}.");
 				}
 			}
 
@@ -77,15 +79,9 @@ namespace Bankomatik.Actions.Actions
 		{
 			var actions = string.Empty;
 
-			if (!drive!.IsBankCard)
-			{
-				actions += "Create bank card.\n";
-			}
-			else if (drive.IsBankCard)
-			{
-				actions += "Withdraw money.\n";
-				actions += "Delete bank card.\n";
-			}
+			actions += "Create bank card.\n";
+			actions += "Withdraw money.\n";
+			actions += "Delete bank card.\n";
 
 			return actions.Split("\n").ToList();
 		}

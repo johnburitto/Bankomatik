@@ -60,16 +60,16 @@ namespace Bankomatik.Crypto.Implementations
 		}
 
 		/// <inheritdoc />
-		public string HashSHA256(string data, int times = 1)
+		public byte[] HashSHA256(string data, int times = 1)
 		{
-			byte[] encryptedData = [];
+			byte[] encryptedData = SHA256.HashData(Encoding.UTF8.GetBytes(data));
 
-			for (int i = 0; i < times; i++)
+			for (int i = 0; i < times - 1; i++)
 			{
-				encryptedData = SHA256.HashData(Encoding.UTF8.GetBytes(data));
+				encryptedData = SHA256.HashData(encryptedData);
 			}
 
-			return Convert.ToBase64String(encryptedData);
+			return encryptedData;
 		}
 
 		#endregion
